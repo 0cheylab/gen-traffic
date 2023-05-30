@@ -35,7 +35,7 @@ jobs:
             sudo openvpn --remote $IP --port $PORT --dev tun --log vpn-log.txt --daemon
 
             # Make random requests
-            shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl --interface tun0 {} -o /dev/null; sleep 1;" || true
+            shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
 
             # Disconnect VPN
             sudo killall openvpn
