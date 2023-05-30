@@ -12,10 +12,32 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: generate traffic
-        env:
-          HOST: ${{ secrets.HOST }}
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openvpn
+
+      - name: Generate traffic
         run: |
           N=$(shuf -i 1-100 -n 1)
           echo "Making ${N} random requests"
-          shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
+
+          # Fetch VPN server list from VPNGate API
+          VPN_SERVERS=$(curl -sS 'http://www.vpngate.net/api/iphone/' | awk -F',' '{print $15}' | awk -F':' '{print $1,$2}' | awk 'NF{print $0}')
+
+          # Loop through the VPN servers and make random requests
+          for SERVER in $VPN_SERVERS; do
+            IP=$(echo $SERVER | awk '{print $1}')
+            PORT=$(echo $SERVER | awk '{print $2}')
+
+            # Establish VPN connection
+            sudo openvpn --remote $IP --port $PORT --dev tun --log vpn-log.txt --daemon
+
+            # Make random requests
+            shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl --interface tun0 {} -o /dev/null; sleep 1;" || true
+
+            # Disconnect VPN
+            sudo killall openvpn
+            sleep 5
+          done
