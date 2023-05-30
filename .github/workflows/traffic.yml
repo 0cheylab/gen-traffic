@@ -1,9 +1,9 @@
 name: gen-traffic
 on:
   workflow_dispatch: {}
-#   schedule:
+   schedule:
 #     # https://crontab.guru/examples.html
-#     - cron: "*/10 * * * *" # every 10 minutes
+     - cron: "*/10 * * * *" # every 10 minutes
 
 jobs:
   gen-traffic:
