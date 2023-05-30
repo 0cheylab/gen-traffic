@@ -30,13 +30,13 @@ jobs:
           for SERVER in $VPN_SERVERS; do
             IP=$(echo $SERVER | awk '{print $1}')
             PORT=$(echo $SERVER | awk '{print $2}')
-
+  
             # Establish VPN connection
-            sudo openvpn --remote $IP --port $PORT --dev tun --log vpn-log.txt --daemon
-
+            sudo openvpn --remote $IP $PORT --dev tun --log vpn-log.txt --daemon
+  
             # Make random requests
             shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
-
+  
             # Disconnect VPN
             sudo killall openvpn
             sleep 5
