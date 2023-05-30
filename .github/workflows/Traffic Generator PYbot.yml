@@ -1,4 +1,4 @@
-name: ทดสอบบน git
+name: ads git
 
 on:
   push:
