@@ -1,0 +1,40 @@
+name: gen-traffic2
+on:
+  workflow_dispatch: {}
+#   schedule:
+#     # https://crontab.guru/examples.html
+#     - cron: "*/10 * * * *" # every 10 minutes
+
+jobs:
+  gen-traffic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openvpn
+      - name: Generate traffic
+        run: |
+          N=$((1 + RANDOM % 100))
+          echo "Making ${N} random requests"
+          # Fetch VPN server list from VPNGate API
+          VPN_SERVERS=$(curl -sS 'http://www.vpngate.net/api/iphone/' | awk -F',' '{print $15}' | awk -F':' '{print $1,$2}' | awk 'NF{print $0}')
+          # Loop through the VPN servers and make random requests
+          for SERVER in $VPN_SERVERS; do
+            IP=$(echo $SERVER | awk '{print $1}')
+            PORT=$(echo $SERVER | awk '{print $2}')
+  
+            # Establish VPN connection
+            sudo openvpn --remote $IP $PORT --dev tun --log vpn-log.txt --daemon
+  
+            # Make random requests
+            shuf -n ${N} urls2.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
+  
+            # Disconnect VPN
+            sudo killall openvpn
+            sleep 5
+          done
