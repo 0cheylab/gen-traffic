@@ -1,4 +1,4 @@
-name: Traffic Generator PYbot
+name: ทดสอบบน git
 
 on:
   push:
