@@ -1,4 +1,4 @@
-name: Dino
+name: Dino Web
 
 on:
   push:
