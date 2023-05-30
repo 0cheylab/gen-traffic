@@ -20,7 +20,7 @@ jobs:
 
       - name: Generate traffic
         run: |
-          N=$(shuf -i 1-100 -n 1)
+          N=$((1 + RANDOM % 100))
           echo "Making ${N} random requests"
 
           # Fetch VPN server list from VPNGate API
