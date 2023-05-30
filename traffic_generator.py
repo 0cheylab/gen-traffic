@@ -10,7 +10,7 @@ class ConfigClass:
     MIN_WAIT = 5
     DEBUG = True
     ROOT_URLS = [
-        "https://whairtoa.com.com/afu.php?zoneid=6000081&var=6000081&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
+        "https://grunoaph.net/afu.php?zoneid=6000081&var=6000081&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
         "https://grunoaph.net/4/6000081",
         "https://whairtoa.com.com/afu.php?zoneid=5999333&var=5999333&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0",
         "https://whairtoa.com.com/4/5999333"
