@@ -10,9 +10,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        uses: docker/setup-docker@v1
-
       - name: Start ngrok
         run: |
           wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
@@ -20,8 +17,10 @@ jobs:
           ./ngrok authtoken $NGROK_AUTH_TOKEN
           ./ngrok tcp 3389 > ngrok.log &
 
-      - name: Run Android Emulator
-        run: docker run -d --name emulator -e DEVICE="pixel" -e API=29 -e ABI="x86" scottyab/docker-android:29
+      - name: Set up Android Emulator
+        run: |
+          docker pull scottyab/docker-android:29
+          docker run -d --name emulator -e DEVICE="pixel" -e API=29 -e ABI="x86" scottyab/docker-android:29
 
       # Add more steps for your build and test processes
 
@@ -30,3 +29,4 @@ jobs:
           while true; do sleep 1; done
 
       # Clean up is not necessary since the workflow will run indefinitely
+
