@@ -1,0 +1,35 @@
+
+
+
+name: Android Emulator Workflow
+
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
+      - name: Build Docker image
+        run: docker build -t android-emulator .
+
+      - name: Start ngrok
+        run: |
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          ./ngrok authtoken $NGROK_AUTH_TOKEN
+          while true; do ./ngrok tcp 3389; sleep 1; done &
+
+      - name: Run Android Emulator
+        run: docker run -d --name emulator android-emulator
+
+      # Add more steps for your build and test processes
+
+      - name: Clean up Docker container
+        run: docker stop emulator
