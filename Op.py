@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 # กำหนด URL เป้าหมาย
-target_url = "https://example.com"
+target_url = "https://dino-th.pages.dev"
 
 # กำหนดเบราว์เซอร์ที่ต้องการใช้ (ต้องมี WebDriver ของเบราว์เซอร์นั้น ๆ ลงในระบบก่อน)
 browser = webdriver.Chrome()
